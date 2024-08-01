@@ -37,7 +37,8 @@ export default function TopContent({ filterValue,
     return (
         <div className="flex flex-col gap-4 w-full px-4 z-0">
             <AddEmployee modalIsOpen={modalIsOpen}
-        setIsOpen={setIsOpen} />
+        setIsOpen={setIsOpen}
+         />
             <div className="flex justify-between gap-3 items-end">
                 <Input
                     isClearable

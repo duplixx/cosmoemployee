@@ -6,9 +6,7 @@ import Modal from 'react-modal';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function AddEmployee({modalIsOpen,setIsOpen}) {
-    console.log("clicked")
-
+function AddEmployee({ modalIsOpen, setIsOpen }) {
   const validationSchema = Yup.object({
     name: Yup.string().required('Name is required'),
     address: Yup.object({
@@ -22,6 +20,7 @@ function AddEmployee({modalIsOpen,setIsOpen}) {
       value: Yup.string().required('Value is required'),
     })),
   });
+
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -37,29 +36,31 @@ function AddEmployee({modalIsOpen,setIsOpen}) {
           value: '',
         },
       ],
+      role: '',
     },
     validationSchema: validationSchema,
     onSubmit: async (values, { resetForm }) => {
-        const headers = {"projectId": "66aa11c539e2fdc09bbba4cb", "environmentId": "66aa11c639e2fdc09bbba4cc"};
+      const headers = {
+        projectId: '66aa11c539e2fdc09bbba4cb',
+        environmentId: '66aa11c639e2fdc09bbba4cc',
+      };
       try {
-        // Ensure the API endpoint is correct and the headers are properly formatted
-        const response = await axios.post('https://free-ap-south-1.cosmocloud.io/development/api/employeedetail', values, {headers: headers});
+        const response = await axios.post('https://free-ap-south-1.cosmocloud.io/development/api/employeedetail', values, { headers: headers });
         console.log(response.data);
         resetForm();
-        // Close the modal after successful submission
-        closeModal()
-        toast.success("User added Successfully");
+        closeModal();
+        toast.success('User added Successfully');
       } catch (error) {
         console.error(error);
-        toast.error("Failed to add user. Please try again.");
+        toast.error('Failed to add user. Please try again.');
       }
     },
   });
-  const message = () => toast("User added Successfully");
 
   function closeModal() {
     setIsOpen(false);
   }
+
   const customStyles = {
     content: {
       top: '50%',
@@ -68,17 +69,18 @@ function AddEmployee({modalIsOpen,setIsOpen}) {
       bottom: 'auto',
       marginRight: '-50%',
       transform: 'translate(-50%, -50%)',
+      width: '50%',
     },
   };
+
   return (
     <>
-    <Modal
-        isOpen={modalIsOpen}
-        contentLabel="Example Modal"
-        style={customStyles}
-      >
-        <div className='min-w-[200px]'>
-          <div className="flex flex-col gap-1">Add Employee</div>
+      <Modal isOpen={modalIsOpen} contentLabel="Example Modal" style={customStyles}>
+        <div className="min-w-[200px]">
+          <div className="flex w-full justify-between">
+            <div className="flex flex-col gap-1 font-bold text-2xl mb-2">Add Employee</div>
+            <button onClick={closeModal} className="font-bold font-xl">X</button>
+          </div>
           <div>
             <form onSubmit={formik.handleSubmit}>
               <div className="mb-4">
@@ -94,9 +96,7 @@ function AddEmployee({modalIsOpen,setIsOpen}) {
                   onBlur={formik.handleBlur}
                   value={formik.values.name}
                 />
-                {formik.touched.name && formik.errors.name && (
-                  <p className="mt-2 text-sm text-red-600">{formik.errors.name}</p>
-                )}
+                {formik.touched.name && formik.errors.name && <p className="mt-2 text-sm text-red-600">{formik.errors.name}</p>}
               </div>
               <div className="mb-4">
                 <label htmlFor="address.line1" className="block text-sm font-medium text-gray-700">
@@ -111,9 +111,7 @@ function AddEmployee({modalIsOpen,setIsOpen}) {
                   onBlur={formik.handleBlur}
                   value={formik.values.address.line1}
                 />
-                {formik.touched.address?.line1 && formik.errors.address?.line1 && (
-                  <p className="mt-2 text-sm text-red-600">{formik.errors.address.line1}</p>
-                )}
+                {formik.touched.address?.line1 && formik.errors.address?.line1 && <p className="mt-2 text-sm text-red-600">{formik.errors.address.line1}</p>}
               </div>
               <div className="mb-4">
                 <label htmlFor="address.city" className="block text-sm font-medium text-gray-700">
@@ -128,9 +126,7 @@ function AddEmployee({modalIsOpen,setIsOpen}) {
                   onBlur={formik.handleBlur}
                   value={formik.values.address.city}
                 />
-                {formik.touched.address?.city && formik.errors.address?.city && (
-                  <p className="mt-2 text-sm text-red-600">{formik.errors.address.city}</p>
-                )}
+                {formik.touched.address?.city && formik.errors.address?.city && <p className="mt-2 text-sm text-red-600">{formik.errors.address.city}</p>}
               </div>
               <div className="mb-4">
                 <label htmlFor="address.country" className="block text-sm font-medium text-gray-700">
@@ -145,9 +141,7 @@ function AddEmployee({modalIsOpen,setIsOpen}) {
                   onBlur={formik.handleBlur}
                   value={formik.values.address.country}
                 />
-                {formik.touched.address?.country && formik.errors.address?.country && (
-                  <p className="mt-2 text-sm text-red-600">{formik.errors.address.country}</p>
-                )}
+                {formik.touched.address?.country && formik.errors.address?.country && <p className="mt-2 text-sm text-red-600">{formik.errors.address.country}</p>}
               </div>
               <div className="mb-4">
                 <label htmlFor="address.zip_code" className="block text-sm font-medium text-gray-700">
@@ -162,23 +156,24 @@ function AddEmployee({modalIsOpen,setIsOpen}) {
                   onBlur={formik.handleBlur}
                   value={formik.values.address.zip_code}
                 />
-                {formik.touched.address?.zip_code && formik.errors.address?.zip_code && (
-                  <p className="mt-2 text-sm text-red-600">{formik.errors.address.zip_code}</p>
-                )}
+                {formik.touched.address?.zip_code && formik.errors.address?.zip_code && <p className="mt-2 text-sm text-red-600">{formik.errors.address.zip_code}</p>}
               </div>
               <div className="mb-4">
                 <label htmlFor="contact_methods.0.contact_method" className="block text-sm font-medium text-gray-700">
                   Contact Method
                 </label>
-                <input
-                  type="text"
+                <select
                   name="contact_methods.0.contact_method"
                   id="contact_methods.0.contact_method"
                   className="mt-1 block w-full pl-3 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.contact_methods[0].contact_method}
-                />
+                >
+                  <option value="" label="Select contact method" />
+                  <option value="Phone" label="Phone" />
+                  <option value="Email" label="Email" />
+                </select>
                 {formik.touched.contact_methods?.[0]?.contact_method && formik.errors.contact_methods?.[0]?.contact_method && (
                   <p className="mt-2 text-sm text-red-600">{formik.errors.contact_methods[0].contact_method}</p>
                 )}
@@ -199,6 +194,21 @@ function AddEmployee({modalIsOpen,setIsOpen}) {
                 {formik.touched.contact_methods?.[0]?.value && formik.errors.contact_methods?.[0]?.value && (
                   <p className="mt-2 text-sm text-red-600">{formik.errors.contact_methods[0].value}</p>
                 )}
+              </div>
+              <div className="mb-4">
+                <label htmlFor="role" className="block text-sm font-medium text-gray-700">
+                  Role
+                </label>
+                <input
+                  type="text"
+                  name="role"
+                  id="role"
+                  className="mt-1 block w-full pl-3 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.role}
+                />
+                {formik.touched.role && formik.errors.role && <p className="mt-2 text-sm text-red-600">{formik.errors.role}</p>}
               </div>
               <div className="mt-5">
                 <button

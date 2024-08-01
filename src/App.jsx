@@ -84,31 +84,44 @@ function App() {
       console.log(error.message)
     });
   }
-  const deleteUser = async (id) => {
-    try {
-      const response = await axios.delete(
-        `https://free-ap-south-1.cosmocloud.io/development/api/employeedetail/${id.toString()}`
-      );
-      if (response.status === 200) {
-        // Remove the user from the local state
-        setEmpRecords(empRecords.filter(user => user._id !== id));
-        alert("User deleted successfully");
-      }
-    } catch (error) {
-      console.error("Error deleting user:", error);
-      if (error.response && error.response.data && error.response.data.message) {
-        toast.error(`Failed to delete user: ${error.response.data.message}`);
-        // alert(`Failed to delete user: ${error.response.data.message}`);
-      } else {
-        alert("Failed to delete user. Please try again.");
-      }
-    }
-  };
   const onDeleteUser = (id) => {
     if (window.confirm("Are you sure you want to delete this user?"+id)) {
       deleteUser(id);
     }
   };
+  const deleteUser = async (id) => {
+    try {
+      const response = await fetch(
+        `https://free-ap-south-1.cosmocloud.io/development/api/employeedetail/${id}`,
+        {
+          method: 'DELETE',
+          headers: headers
+        }
+      );
+  
+      console.log("Delete response:", response);
+  
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Delete response data:", data);
+        setEmpRecords(empRecords.filter(user => user._id !== id));
+        toast.success("User deleted successfully");
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.message || response.statusText);
+      }
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      if (error instanceof TypeError) {
+        console.error("Network error:", error.message);
+        toast.error(`Failed to delete user: Network error - ${error.message}`);
+      } else {
+        console.error("Error details:", error);
+        toast.error(`Failed to delete user: ${error.message}`);
+      }
+    }
+  };
+  
   useEffect(() => {
     fetchEmployees();
   }, []);
@@ -137,11 +150,20 @@ function App() {
       case "contact_methods":
         return (
           <div className="flex flex-col">
-            {cellValue.map((method) => (
-              <p key={method.value} className="text-bold text-sm">{method.contact_method}: {method.value}</p>
+            {cellValue.map((method, index) => (
+              <p key={index} className="text-bold text-sm">{method.contact_method}: {method.value}</p>
             ))}
           </div>
         );
+      case "role":
+        return (
+          <div className="flex flex-col">
+             <p className="text-bold text-sm">
+              {user.role}
+              </p>
+          </div>
+        );
+          
       case "actions":
         return (
           <div className="relative flex items-center gap-2">

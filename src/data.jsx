@@ -1,9 +1,9 @@
 import React from "react";
 const columns = [
   {name: "NAME", uid: "name"},
-  {name: "ROLE", uid: "address"},
-  {name: "EMAIL", uid: "contact_methods"},
-  {name:"PHONE", uid:"contact_methods"},
+  {name: "ROLE", uid: "role"},
+  {name: "CONTACT", uid: "contact_methods"},
+  {name:"ADDRESS", uid:"address"},
   {name: "ACTIONS", uid: "actions"},
 ];
 
