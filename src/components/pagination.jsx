@@ -10,17 +10,13 @@ export default function PaginationComponent({ selectedKeys, items, page, pages, 
         return items;
     }, [items, selectedKeys]);
     return (
-      <div className="py-2 px-2 flex justify-between items-center ">
-        <span className="w-[30%] text-small text-default-400">
-          {selectedKeys === "all"
-            ? "All items selected"
-            : `${selectedKeys.length} of ${filteredItems.length} selected`}
-        </span>
+      <div className="py-2 px-2 flex justify-between items-center mt-6">
+
         <Pagination
           isCompact
           showControls
           showShadow
-          color="primary"
+          color="secondary"
           page={page}
           total={pages}
           onChange={setPage}

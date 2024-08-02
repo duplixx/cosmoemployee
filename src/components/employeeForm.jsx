@@ -49,6 +49,7 @@ function AddEmployee({ modalIsOpen, setIsOpen }) {
         console.log(response.data);
         resetForm();
         closeModal();
+        window.location.reload();
         toast.success('User added Successfully');
       } catch (error) {
         console.error(error);

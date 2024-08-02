@@ -7,7 +7,7 @@ function navbar() {
    <>
    <Navbar className="mt-3">
       <NavbarBrand className="flex justify-center items-center space-x-2">
-        <img src="/cosmo.avif" alt="ada" className="w-10 h-10"/>
+        <img src="/cosmo.avif" alt="ada" className="w-10 h-10 rounded-full"/>
         <p className="font-bold text-inherit">Cosmo Employee Management</p>
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">

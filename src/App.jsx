@@ -25,6 +25,7 @@ function App() {
     column: "age",
     direction: "ascending",
   });
+  const headers = {'Content-Type': 'application/json',"projectId": "66aa11c539e2fdc09bbba4cb", "environmentId": "66aa11c639e2fdc09bbba4cc"};
   const navigateToMemberDetails = (id) => {
     console.log("Navigating to member details with id:", id);
     navigate(`memberDetails/${id}`);
@@ -76,7 +77,8 @@ function App() {
     });
   }, [sortDescriptor, items]);
   
-  const headers = {"projectId": "66aa11c539e2fdc09bbba4cb", "environmentId": "66aa11c639e2fdc09bbba4cc"};
+
+
   const fetchEmployees = () => {
     axios.get("https://free-ap-south-1.cosmocloud.io/development/api/employeedetail" + "?limit=10&offset=0", { headers: headers }).then((response) => {
       setEmpRecords(response.data.data);
@@ -91,30 +93,25 @@ function App() {
   };
   const deleteUser = async (id) => {
     try {
-      const response = await fetch(
-        `https://free-ap-south-1.cosmocloud.io/development/api/employeedetail/${id}`,
-        {
-          method: 'DELETE',
-          headers: headers
-        }
-      );
+      const response = await axios.delete(`https://free-ap-south-1.cosmocloud.io/development/api/employeedetail/${id}`, { data: {}, headers: headers });
   
       console.log("Delete response:", response);
   
-      if (response.ok) {
-        const data = await response.json();
-        console.log("Delete response data:", data);
+      if (response.status === 200) {
+        console.log("Delete response data:", response.data);
         setEmpRecords(empRecords.filter(user => user._id !== id));
         toast.success("User deleted successfully");
       } else {
-        const errorData = await response.json();
-        throw new Error(errorData.message || response.statusText);
+        throw new Error(response.statusText);
       }
     } catch (error) {
       console.error("Error deleting user:", error);
       if (error instanceof TypeError) {
         console.error("Network error:", error.message);
         toast.error(`Failed to delete user: Network error - ${error.message}`);
+      } else if (error.response && error.response.status === 400) {
+        console.error("Error details:", error.response.data);
+        toast.error(`Failed to delete user: ${error.response.data.message}`);
       } else {
         console.error("Error details:", error);
         toast.error(`Failed to delete user: ${error.message}`);
@@ -133,9 +130,10 @@ function App() {
       case "name":
         return (
           <User
-            avatarProps={{radius: "lg", src: user.avatar}}
+            avatarProps={{radius: "xl", src: user.name.index}}
             description={user.email}
             name={cellValue}
+            className='font-bold'
           >
             {user.email}
           </User>
@@ -157,8 +155,8 @@ function App() {
         );
       case "role":
         return (
-          <div className="flex flex-col">
-             <p className="text-bold text-sm">
+          <div className="flex flex-col justify-center items-center ">
+             <p className="  w-1/2 p-2">
               {user.role}
               </p>
           </div>
@@ -203,7 +201,7 @@ function App() {
       />
       <ToastContainer/>
       {empRecords.length > 0 ? (
-        <Table aria-label="Example table with custom cells">
+        <Table aria-label="Example table with custom cells" >
           <TableHeader columns={headerColumns}>
             {(column) => (
               <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>
